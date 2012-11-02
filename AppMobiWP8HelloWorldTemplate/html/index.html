@@ -3,9 +3,6 @@
 <head>
 <title>Your New Application</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
-    <script>
-        window.external.notify("logger:Loading index.html");
-    </script>
 <style type="text/css">
     /* Prevent copy paste for all elements except text fields and block touch actions */
     *  { -webkit-user-select:none; -webkit-tap-highlight-color:rgba(255, 255, 255, 0); -ms-touch-action:none; }
@@ -26,8 +23,19 @@
 </style>
 
 <script type="text/javascript" charset="utf-8" src="_appMobi/appmobi_local_bootstrap.js"></script> 
+<script type="text/javascript" charset="utf-8" src="_appMobi/jq.desktopBrowsers.js"></script> 
 
 <script type="text/javascript">
+// *** AppMobi.debug.log("") to display messages in the VS 2012 output window. ***
+// For debugging purposes (This will save your life)
+window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+    AppMobi.debug.log("--------------------");
+    AppMobi.debug.log("onerror: errorMsg: " + errorMsg);
+    AppMobi.debug.log("onerror: url: " + url);
+    AppMobi.debug.log("onerror: lineNumber: " + lineNumber);
+    AppMobi.debug.log("--------------------");
+}
+
 /* This function runs once the page is loaded, but appMobi is not yet active */
 var init = function(){
 
@@ -44,11 +52,13 @@ document.addEventListener('touchmove', preventDefaultScroll, false);
 
 /* This code is used to run as soon as appMobi activates */
 var onDeviceReady = function () {
+    AppMobi.debug.log("in onDeviceReady");
+
     AppMobi.device.setAutoRotate(false);
     //AppMobi.device.setRotateOrientation("landscape");
     //AppMobi.display.lockViewportWindow(768, 1280, 1280, 768);
-    AppMobi.device.setRotateOrientation("portrait");
-    AppMobi.display.lockViewportWindow(1280, 768, 768, 1280);
+    //AppMobi.device.setRotateOrientation("portrait");
+    //AppMobi.display.lockViewportWindow(1280, 768, 768, 1280);
 
 	//hide appMobi's plash screen not yours
 	AppMobi.device.hideSplashScreen();	
@@ -57,6 +67,19 @@ var onDeviceReady = function () {
 	document.getElementById('content').style.display = "block";
 };
 document.addEventListener("appMobi.device.ready",onDeviceReady,false);    
+
+var onOrientationChange = function () {
+    AppMobi.debug.log("in onOrientationChange");
+
+    // do what you like here
+};
+document.addEventListener("appMobi.device.orientation.change", onOrientationChange, false);
+
+function button_click() {
+    AppMobi.debug.log("in button_click");
+    AppMobi.display.lockViewportWindow(1280, 768, 768, 1280);
+}
+
 </script>
 
 </head>
@@ -66,6 +89,7 @@ document.addEventListener("appMobi.device.ready",onDeviceReady,false);
     </div>
     <div id="content">
         <!-- Your app content goes here -->
+        <button onclick="button_click()">test</button>
         <br /> 
         Hello Windows Phone 8 App.  Place the content of your appMobi app here.
     </div>
